@@ -26,3 +26,8 @@ var pool  = mysql.createPool({
 app.get('/', (req, res) => {
     res.send(`API version : ${process.env.VERSION}`);
   });
+
+//user regisztráció
+
+
+//user bejelentkezés
