@@ -77,9 +77,29 @@ app.post('/reg', (req, res) => {
       res.status(202).send('Sikeres regisztráció!');
       return;
     });
-
+    return;
   });
 
 });
 
 //user bejelentkezés
+
+app.post('/login', (req, res) => {
+  if(!req.body.email || !req.body.passwd){
+    res.status(400).send('Hiányzó adatok!');
+    return;
+  }
+
+  pool.query(`SELECT ID, name, email, role FROM users WHERE email ='${req.body.email}' AND passwd='${CryptoJS.SHA1(req.body.passwd)}'`, (err, results) => {
+    if(err){
+      res.status(500).send('Hiba történt az adatbázis elérése közben!');
+      return;
+    }
+    if(results.length == 0){
+      res.status(203).send('Hibás belépési adatok!');
+      return;
+    }
+    res.status(202).send(results);
+    return;
+  });
+});
