@@ -102,4 +102,55 @@ app.post('/login', (req, res) => {
     res.status(202).send(results);
     return;
   });
+
 });
+
+//bejelentkezett felhasználó adatainak lekérése
+app.get('/me/:id', logincheck, (req, res) => {
+  if(!req.params.id){
+    res.status(203).send('Hiányzol.. azonosító')
+    return;
+  }
+
+  if(!req.body.name || !req.body.email || !req.body.role){
+    res.status(203).send('Hiányzó adatok!');
+    return;
+  } 
+
+//TODO aoi
+
+  pool.query(`UPDATE users SET name='${req.body.name}', email='${req.body.email}', role='${req.body.role}' WHERE ID='${req.params.id}'`, (err, results) => {
+    if(err){
+      res.status(500).send('Hyba történt az adatbéz lekérése közben internális szerveri hiba')
+      return;
+    }
+
+    if(results.affectedRows == 0){
+      res.status(203).send('Hibás a zonosító.!')
+      return;
+    }
+
+    res.status(200).send('Felhasználéói adatok módósítva')
+    return;
+  });
+});
+
+//jelszó módoshítás
+app.patch('/passmod/:id', logincheck, (req, res) => {
+  if(!req.params.id){
+    res.status(203).send('Hiányzó adatok!!!');
+    return;
+  }
+
+  if(!req.body.oldpass || !req.body.newpass )
+})
+
+
+
+
+
+
+
+
+
+
