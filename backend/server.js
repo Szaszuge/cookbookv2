@@ -108,12 +108,12 @@ app.post('/login', (req, res) => {
 //bejelentkezett felhasználó adatainak lekérése
 app.get('/me/:id', logincheck, (req, res) => {
   if(!req.params.id){
-    res.status(203).send('Hiányzol.. azonosító')
+    res.status(400).send('Hiányzol.. azonosító')
     return;
   }
 
   if(!req.body.name || !req.body.email || !req.body.role){
-    res.status(203).send('Hiányzó adatok!');
+    res.status(400).send('Hiányzó adatok!');
     return;
   } 
 
@@ -126,7 +126,7 @@ app.get('/me/:id', logincheck, (req, res) => {
     }
 
     if(results.affectedRows == 0){
-      res.status(203).send('Hibás a zonosító.!')
+      res.status(400).send('Hibás a zonosító.!')
       return;
     }
 
@@ -138,11 +138,41 @@ app.get('/me/:id', logincheck, (req, res) => {
 //jelszó módoshítás
 app.patch('/passmod/:id', logincheck, (req, res) => {
   if(!req.params.id){
-    res.status(203).send('Hiányzó adatok!!!');
+    res.status(400).send('Hiányzó adatok!!!');
     return;
   }
 
-  if(!req.body.oldpass || !req.body.newpass )
+  if(!req.body.oldpass || !req.body.newpass || req.body.confirm){
+    res.status(400).send('HIányo transports: ["websocket"]znak az adatok!l')
+    return;
+  }
+//jelszó ellenőrzés
+if(req.body.newpass != req.body.confirm){
+  res.status(400).send("A jelszavak nem egyeznek")
+  return;
+}
+
+//jelszó minimum kritériumoknak való megfelelése
+
+if(!req.body.newpass.match(passwdRegex)){
+  res.status(400).send("A jelszó nem felel meg a követelményeknek")
+  return;
+}
+
+//megnézzük hogy jó-e a jelenlegi jelszó segítsenek rajtam ugandai gyerekmunkás vagyok
+pool.query(`SELECT passwd FROM users WHERE ID='${req.params.id}'`, (err, results) => {
+  if(err){
+    res.status(500).send('Hiba történt az adatbázis lekérése közben. Kérem keresse fel a rendszergazdát, vagy hívják fel segélyszolgálatunkat a 06 20 561 6580 telefonszámon.')
+    return;
+  }
+
+  if(results.length == 0){
+  res.status(400).send('Hibás azonosító!')
+  return;
+  }
+  
+})
+
 })
 
 
