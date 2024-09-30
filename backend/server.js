@@ -95,7 +95,7 @@ pool.query(`SELECT * FROM users WHERE phone='${req.body.phone}'`, (err, results)
 
 // új felhasználó felvétele
 
-    pool.query(`INSERT INTO users VALUES('${uuid.v4()}', '${req.body.name}', '${req.body.email}', SHA1('${req.body.password}', '${req.body.phone}'), 'user', 'true')`, (err, results) => {
+    pool.query(`INSERT INTO users VALUES('${uuid.v4()}', '${req.body.name}', '${req.body.email}', '${req.body.phone}', SHA1('${req.body.passwd}'), '0', '1')`, (err, results) => {
       if(err){
         res.status(500).send('Hibaá történt az adatbázisművelet közben!');
         return;
@@ -117,6 +117,7 @@ app.post('/login', (req, res) => {
   }
 
   pool.query(`SELECT ID, name, email, role FROM users WHERE email ='${req.body.email}' AND passwd='${CryptoJS.SHA1(req.body.passwd)}'`, (err, results) => {
+    //console.log(CryptoJS.SHA1(req.body.passwd) == 'd5d4cd07616a542891b7ec2d0257b3a24b69856e')
     if(err){
       res.status(500).send('Hiba történt az adatbázis elérése közben!');
       return;

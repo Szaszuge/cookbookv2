@@ -27,14 +27,14 @@ function login(){
         }
 
         loggedUser = res.data;
-        localStorage.setItem('stepcounter', JSON.stringify(loggedUser));
+        localStorage.setItem('cookbook', JSON.stringify(loggedUser));
         renderNavItems();
-        render('steps');
+        render('recipes');
     });
 }
 
 function logout(){
-    localStorage.removeItem('stepcounter');
+    localStorage.removeItem('cookbook');
     loggedUser = null;
     renderNavItems();
     render('login');
