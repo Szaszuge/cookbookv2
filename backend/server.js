@@ -9,6 +9,7 @@ var moment = require('moment');
 const app = express();
 const port = process.env.PORT;
 const passwdRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+const phoneRegex  = /^[0-9]*$/;
 
 // middleware
 app.use(cors());
@@ -36,7 +37,7 @@ app.post('/reg', (req, res) => {
 // kötelező adatok ellenőrzése (telefonszám nem kötelező ezért nem kell ellenőrizni)
 
   if(!req.body.name || !req.body.email || !req.body.passwd || !req.body.confirmPasswd){
-    res.status(400).send('Nem adtál meg minden kötelező adatot!');
+    res.status(400).send('Ném adtál meg minden kötelező adatot!');
     return;
   }
 
@@ -44,34 +45,59 @@ app.post('/reg', (req, res) => {
 
   if(req.body.passwd != req.body.confirmPasswd){
     res.status(400).send('A megadott jelszavak nem egyeznek!')
+    return;
   }
 
 // jelszó minimum 8 karakter, legalább 1 kisbetű és 1 nagybetű és egy szám
 
   if(!req.body.passwd.match(passwdRegex)){
     res.status(400).send('A jelszó nem felel meg a kritériumoknak! (8 karakter, 1 szám, legalább 1 nagybetű)')
+    return;
   }
+
+// telefonszám csak szám lehet
+
+if(!req.body.phone.match(phoneRegex)){
+  res.status(400).send('A telefonszám nem tartalmazhat betűket vagy speciális karaktereket!')
+  return;
+}
 
 // e-mail cím ellenőrzés
 
   pool.query(`SELECT * FROM users WHERE email='${req.body.email}'`, (err, results) => {
     if(err){
-      res.status(500).send('Hiba történt az adatbázis elérése közben!');
+      res.status(500).send('Hiba ctörtént az adatbázis elérése közben!');
       return;
     }
 
 // ha már van ilyen e-mail cím
 
     if(results.length != 0){
-      res.status(400).send('Ilyen e-mail címmel már regisztráltak te kukifely');
+      res.status(400).send('Ilyen e-mail címmel már regisztráltak!');
       return;
     }
 
+// telefonszám ellenőrzés
+
+pool.query(`SELECT * FROM users WHERE phone='${req.body.phone}'`, (err, results) => {
+  if(err){
+    res.status(500).send('Hibab történt az adatbázis elérése közben!')
+    return;
+  }
+
+// ha már van ilyen telefonszám
+
+  if(results.length != 0){
+    res.status(400).send('Ilyen telefonszámmal már regisztráltak!')
+    return;
+  }
+})
+
 // új felhasználó felvétele
 
-    pool.query(`INSERT INTO users VALUES('${uuid.v4()}', '${req.body.name}', '${req.body.email}', SHA1('${req.body.password}'), 'user')`, (err, results) => {
+    pool.query(`INSERT INTO users VALUES('${uuid.v4()}', '${req.body.name}', '${req.body.email}', SHA1('${req.body.password}', '${req.body.phone}'), 'user', 'true')`, (err, results) => {
       if(err){
-        res.status(500).send('Hiba történt az adatbázisművelet közben!');
+        res.status(500).send('Hibaá történt az adatbázisművelet közben!');
         return;
       }
       res.status(202).send('Sikeres regisztráció!');

@@ -4,7 +4,8 @@ function registration(){
         name: document.querySelector('#name').value,
         email: document.querySelector('#email').value,
         passwd: document.querySelector('#passwd').value,
-        confirm: document.querySelector('#confirm').value
+        confirmPasswd: document.querySelector('#confirm').value,
+        phone: document.querySelector('#phone').value
     }
 
     axios.post(`${serverUrl}/reg`, newUser).then(res => {
