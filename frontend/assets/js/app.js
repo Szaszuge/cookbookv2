@@ -29,8 +29,8 @@ async function render(view){
             getUsers();
             break;
         }
-        case 'steps': {
-            getStepDatas();
+        case 'recipes': {
+            //getRecipes(); //ezt majd majd getStepDatas
             break;
         }
         case 'statistics': {
@@ -40,3 +40,49 @@ async function render(view){
         }
     }
 }
+if (localStorage.getItem('cookbook')){
+    loggedUser = JSON.parse(localStorage.getItem('cookbook'));
+    render('recipes');
+}else{
+    render('recipes');
+}
+function renderNavItems(){
+    console.log(loggedUser)
+    let lgdOutNavItems = document.querySelectorAll('.lgdOut');
+    let lgdInNavItems = document.querySelectorAll('.lgdIn');
+    let admNavItems = document.querySelectorAll('.lgdAdm');
+
+    // ha nem vagyunk bejelentkezve
+    if (loggedUser == null){
+        lgdInNavItems.forEach(item =>{
+            item.classList.add('d-none');
+        });
+        lgdOutNavItems.forEach(item => {
+            item.classList.remove('d-none');
+        });
+        admNavItems.forEach(item => {
+            item.classList.add('d-none');
+        });
+        return;
+    }
+
+    // ha be vagyunk  jelentkezve és
+
+    // admin vagyunk
+    if (loggedUser.role == 'admin'){
+        admNavItems.forEach(item => {
+            item.classList.remove('d-none');
+        });
+    }
+ 
+    // user vagyunk
+    lgdInNavItems.forEach(item => {
+        item.classList.remove('d-none');
+    });
+
+    lgdOutNavItems.forEach(item => {
+        item.classList.add('d-none');
+    });
+}
+
+renderNavItems();
