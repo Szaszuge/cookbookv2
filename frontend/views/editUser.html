@@ -1,0 +1,24 @@
+<div class="p-3"></div>
+    <h3>Edit user profile</h3>
+    <hr>
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="name" placeholder="Name" disabled>
+        <label for="name">Name</label>
+    </div>
+    <div class="form-floating mb-3">
+        <input type="email" class="form-control" id="email" placeholder="name@example.com" disabled>
+        <label for="email">E-mail address</label>
+    </div>
+
+    <div class="form-floating mb-3">
+        <select class="form-select" id="role" aria-label="Role">
+          <option value="user">user</option>
+          <option value="admin">admin</option>
+        </select>
+        <label for="role">Role</label>
+    </div>
+
+    <button class="btn btn-warning mb-3" id="updBtn">Update profile</button>
+    <button class="btn btn-secondary mb-3" onclick="render('users')">Back to the users list...</button>
+
+</div>

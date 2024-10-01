@@ -38,7 +38,7 @@ function logout(){
     loggedUser = null;
     renderNavItems();
     render('login');
-    console.log('A kurva anyád te mocskos zsidó')
+    console.log('nem jo')
 }
 
 function getMe(){

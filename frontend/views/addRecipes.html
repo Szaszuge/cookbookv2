@@ -1,0 +1,42 @@
+<div class="p-3">
+    <h3>Manage my recipes</h3>
+    <hr>
+    
+    <div class="accordion mb-3" id="accordionExample">
+        <div class="accordion-item">
+          <h2 class="accordion-header">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              Add recipes
+            </button>
+          </h2>
+          <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+             
+                <div class="form-floating mb-3">
+                    <input type="hidden" class="form-control" id="ID" placeholder="ID">
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="date" class="form-control" id="date" placeholder="Date">
+                    <label for="date">Date</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="number" class="form-control" id="steps" placeholder="Steps">
+                    <label for="steps">Recipes</label>
+                </div>
+               
+                  <button class="btn btn-primary mb-3  me-3 insertmode" onclick="addStep()">Add</button>
+                  <button class="btn btn-warning mb-3 d-none editmode" onclick="updateStep()">Update</button>
+                  <button class="btn btn-danger mb-3 d-none editmode" onclick="deleteStep()">Delete</button>
+                  <button class="btn btn-secondary mb-3 me-3 d-none editmode" onclick="cancel()">Cancel</button>
+             
+                  <button class="btn btn-danger mb-3" onclick="deleteAllSteps()">Delete all</button>
+                
+                
+                
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+</div>
